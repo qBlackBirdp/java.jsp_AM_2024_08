@@ -18,9 +18,20 @@ List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getA
 	<h2>게시물 목록 v1</h2>
 
 	<ul>
-		<li><%=articleRows.get(0).get("id")%>번, <%=articleRows.get(0).get("regDate")%>,<%=articleRows.get(0).get("title")%>,<%=articleRows.get(0).get("body")%></li>
-		<li><%=articleRows.get(1).get("id")%>번, <%=articleRows.get(1).get("regDate")%>,<%=articleRows.get(1).get("title")%>,<%=articleRows.get(1).get("body")%></li>
-		<li><%=articleRows.get(2).get("id")%>번, <%=articleRows.get(2).get("regDate")%>,<%=articleRows.get(2).get("title")%>,<%=articleRows.get(2).get("body")%></li>
-	</ul>
+    <% 
+        if (articleRows != null && !articleRows.isEmpty()) {
+            for (int i = 0; i < articleRows.size(); i++) {
+                Map<String, Object> article = articleRows.get(i);
+    %>
+        <li><%=article.get("id")%>번, <%=article.get("regDate")%>, <%=article.get("title")%>, <%=article.get("body")%></li>
+    <% 
+            }
+        } else {
+    %>
+        <li>게시물이 없습니다.</li>
+    <% 
+        }
+    %>
+    </ul>
 </body>
 </html>
