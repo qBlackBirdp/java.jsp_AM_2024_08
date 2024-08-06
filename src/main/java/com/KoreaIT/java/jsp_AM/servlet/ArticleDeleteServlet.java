@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/delete")
+@WebServlet("/article/doDelete")
 public class ArticleDeleteServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -31,7 +31,7 @@ public class ArticleDeleteServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		String url = "jdbc:mysql://127.0.0.1:3306/24_08_JAM?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul";
+		String url = "jdbc:mysql://127.0.0.1:3306/AM_JDBC_2024_07?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul";
 
 		String user = "root";
 		String password = "1234";
@@ -50,8 +50,9 @@ public class ArticleDeleteServlet extends HttpServlet {
 			sql.append("FROM article");
 			sql.append("WHERE id = ?", id);
 
-//			Map<String, Object> articleRow = DBUtil.delete(id);
-
+			DBUtil.delete(conn, sql);
+			
+			response.getWriter().append(String.format("<script>alert('%d번글이 삭제됨'), location.replace('list');</script>", id));
 //			request.setAttribute("articleRow", articleRow);
 //			request.getRequestDispatcher("/jsp/article/detail.jsp").forward(request, response);
 
