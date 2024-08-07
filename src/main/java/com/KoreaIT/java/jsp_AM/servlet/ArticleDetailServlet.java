@@ -68,5 +68,4 @@ public class ArticleDetailServlet extends HttpServlet {
 		}
 
 	}
-
 }

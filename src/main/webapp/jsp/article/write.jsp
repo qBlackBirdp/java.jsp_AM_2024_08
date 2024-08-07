@@ -16,7 +16,7 @@ Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("art
 
     <h2>게시물 작성</h2>
 	<!-- 게시물 작성 폼 -->
-    <form action="write" method="post">
+    <form action="dowrite" method="post">
         <div>
             <label for="title">제목:</label>
             <input type="text" id="title" name="title" required>
