@@ -16,5 +16,8 @@
 	<ul>
 		<li><a href="../member/join">회원가입</a></li>
 	</ul>
+	<ul>
+		<li><a href="../member/login">로그인</a></li>
+	</ul>
 </body>
 </html>

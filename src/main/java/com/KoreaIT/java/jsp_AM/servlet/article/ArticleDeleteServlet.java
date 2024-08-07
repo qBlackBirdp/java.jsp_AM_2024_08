@@ -1,4 +1,4 @@
-package com.KoreaIT.java.jsp_AM.servlet;
+package com.KoreaIT.java.jsp_AM.servlet.article;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -16,9 +16,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/modify")
-public class ArticleModifyServlet extends HttpServlet {
-	
+@WebServlet("/article/doDelete")
+public class ArticleDeleteServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -41,22 +40,21 @@ public class ArticleModifyServlet extends HttpServlet {
 
 		try {
 			conn = DriverManager.getConnection(url, user, password);
+			response.getWriter().append("연결 성공!");
 
 			int id = Integer.parseInt(request.getParameter("id"));
 
-			SecSql sql = SecSql.from("SELECT *");
+//			String sql = String.format("SELECT * FROM article WHERE id = %d", id);
+
+			SecSql sql = SecSql.from("DELETE");
 			sql.append("FROM article");
 			sql.append("WHERE id = ?", id);
 
-			Map<String, Object> articleRow = DBUtil.selectRow(conn, sql);
-
-			if (articleRow == null) {
-				
-			}
-
-			request.setAttribute("articleRow", articleRow);
-
-			request.getRequestDispatcher("/jsp/article/modify.jsp").forward(request, response);
+			DBUtil.delete(conn, sql);
+			
+			response.getWriter().append(String.format("<script>alert('%d번글이 삭제됨'), location.replace('list');</script>", id));
+//			request.setAttribute("articleRow", articleRow);
+//			request.getRequestDispatcher("/jsp/article/detail.jsp").forward(request, response);
 
 		} catch (SQLException e) {
 			System.out.println("에러 1 : " + e);
@@ -71,11 +69,5 @@ public class ArticleModifyServlet extends HttpServlet {
 		}
 
 	}
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-    	doGet(request, response);
-        
-    }
-
+	
 }

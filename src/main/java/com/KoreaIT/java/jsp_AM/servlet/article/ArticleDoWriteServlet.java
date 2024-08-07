@@ -1,4 +1,4 @@
-package com.KoreaIT.java.jsp_AM.servlet;
+package com.KoreaIT.java.jsp_AM.servlet.article;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -17,8 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 
-@WebServlet("/member/dojoin")
-public class ArticleDoJoinServlet extends HttpServlet {
+@WebServlet("/article/dowrite")
+public class ArticleDoWriteServlet extends HttpServlet {
 	
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -42,38 +42,24 @@ public class ArticleDoJoinServlet extends HttpServlet {
         try {
             conn = DriverManager.getConnection(url, user, password);
 
-            String loginId = request.getParameter("loginId");
-            String loginPw = request.getParameter("loginPw");
-            String name = request.getParameter("name");
-            
-            SecSql sql = SecSql.from("SELECT COUNT(*) AS cnt");
-			sql.append("FROM `member`");
-			sql.append("WHERE loginId = ?;", loginId);
+            String title = request.getParameter("title");
+            String body = request.getParameter("content");
 
-			boolean isJoinableLoginId = DBUtil.selectRowBooleanValue(conn, sql);
-
-			if (isJoinableLoginId == false) {
-				response.getWriter().append(String
-						.format("<script>alert('%s는 이미 사용중'); location.replace('../member/join');</script>", loginId));
-				return;
-			}
-
-
-            sql = SecSql.from("INSERT INTO `member`");
+            SecSql sql = SecSql.from("INSERT INTO article");
             sql.append("SET regDate = NOW(),");
             sql.append("updateDate = NOW(),");
-            sql.append("loginId = ?,", loginId);
-            sql.append("loginPw= ?,", loginPw);
-            sql.append("`name` = ?", name);
+            sql.append("title = ?,", title);
+            sql.append("`body`= ?,", body);
+            sql.append("memberId = ?", 1); // 작성자 ID는 하드코딩 (예시용, 실제로는 세션에서 가져와야 함)
 
             int id = DBUtil.insert(conn, sql);
 
             response.getWriter().append(String.format(
-                "<script>alert('%d번 회원 가입 되었습니다.'); location.replace('../article/list');</script>", id, id));
+                "<script>alert('%d번 글이 작성되었습니다.'); location.replace('detail?id=%d');</script>", id, id));
 
         } catch (SQLException e) {
             System.out.println("SQL 에러: " + e.getMessage());
-            response.getWriter().append("<script>alert('회원가입에 실패했습니다.'); history.back();</script>");
+            response.getWriter().append("<script>alert('글 작성에 실패했습니다.'); history.back();</script>");
         } finally {
             try {
                 if (conn != null && !conn.isClosed()) {

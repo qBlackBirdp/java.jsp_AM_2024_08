@@ -1,4 +1,4 @@
-package com.KoreaIT.java.jsp_AM.servlet;
+package com.KoreaIT.java.jsp_AM.servlet.member;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -16,14 +16,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/member/join")
-public class ArticleJoinServlet extends HttpServlet {
-	
+@WebServlet("/member/login")
+public class MemberLoginServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("/jsp/member/join.jsp").forward(request, response);
+        request.getRequestDispatcher("/jsp/member/login.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
