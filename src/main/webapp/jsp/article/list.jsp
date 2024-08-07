@@ -28,7 +28,15 @@ int endPage = Math.min(totalPages, currentPage + pageRange);
 
 	<a href="../home/main">메인 페이지로 </a>
 	
-	<!-- 페이지개수 정하기  -->
+	<!-- 글 작성 페이지로 이동하는 링크 추가 -->
+    <div>
+        <a href="write">글 작성하기</a>
+        <div>
+        
+        </div>
+    </div>
+
+    <!-- 페이지개수 정하기  -->
 	
 	<form method="get" action="">
         <label for="pageSize">페이지당 항목 수:</label>
