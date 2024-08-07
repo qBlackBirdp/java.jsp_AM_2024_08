@@ -45,9 +45,21 @@ public class ArticleDoJoinServlet extends HttpServlet {
             String loginId = request.getParameter("loginId");
             String loginPw = request.getParameter("loginPw");
             String name = request.getParameter("name");
+            
+            SecSql sql = SecSql.from("SELECT COUNT(*) AS cnt");
+			sql.append("FROM `member`");
+			sql.append("WHERE loginId = ?;", loginId);
+
+			boolean isJoinableLoginId = DBUtil.selectRowBooleanValue(conn, sql);
+
+			if (isJoinableLoginId == false) {
+				response.getWriter().append(String
+						.format("<script>alert('%s는 이미 사용중'); location.replace('../member/join');</script>", loginId));
+				return;
+			}
 
 
-            SecSql sql = SecSql.from("INSERT INTO `member`");
+            sql = SecSql.from("INSERT INTO `member`");
             sql.append("SET regDate = NOW(),");
             sql.append("updateDate = NOW(),");
             sql.append("loginId = ?,", loginId);
@@ -61,7 +73,7 @@ public class ArticleDoJoinServlet extends HttpServlet {
 
         } catch (SQLException e) {
             System.out.println("SQL 에러: " + e.getMessage());
-            response.getWriter().append("<script>alert('회원가에 실패했습니다.'); history.back();</script>");
+            response.getWriter().append("<script>alert('회원가입에 실패했습니다.'); history.back();</script>");
         } finally {
             try {
                 if (conn != null && !conn.isClosed()) {
