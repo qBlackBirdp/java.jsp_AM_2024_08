@@ -68,8 +68,10 @@ public class ArticleListServlet extends HttpServlet {
 
 			// 페이징 쿼리
             int offset = (page - 1) * pageSize;
-            SecSql sql = SecSql.from("SELECT *");
-            sql.append("FROM article");
+            SecSql sql = SecSql.from("SELECT a.*, m.name");
+            sql.append("FROM article AS a");
+            sql.append("INNER JOIN `member` AS m");
+            sql.append("ON a.memberId = m.id");
             sql.append("ORDER BY id DESC");
             sql.append("LIMIT ?", pageSize);
             sql.append("OFFSET ?", offset);

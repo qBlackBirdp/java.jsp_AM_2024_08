@@ -52,6 +52,7 @@ public class ArticleDoWriteServlet extends HttpServlet {
             sql.append("updateDate = NOW(),");
             sql.append("title = ?,", title);
             sql.append("`body`= ?,", body);
+            sql.append("memberId= ?", loginedMemberId);
             
 
             int id = DBUtil.insert(conn, sql);
