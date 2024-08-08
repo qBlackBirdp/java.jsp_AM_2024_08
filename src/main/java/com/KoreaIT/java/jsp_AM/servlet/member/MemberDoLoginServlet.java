@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
 import com.KoreaIT.java.jsp_AM.util.DBUtil;
@@ -15,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 
 @WebServlet("/member/dologin")
@@ -62,21 +62,18 @@ public class MemberDoLoginServlet extends HttpServlet {
 						.format("<script>alert('비밀번호가 일치하지 않습니다.'); location.replace('../member/login');</script>"));
 				return;
 			}
-
-//            sql = SecSql.from("INSERT INTO `member`");
-//            sql.append("SET regDate = NOW(),");
-//            sql.append("updateDate = NOW(),");
-//            sql.append("loginId = ?,", loginId);
-//            sql.append("loginPw= ?,", loginPw);
-//            sql.append("`name` = ?", name);
-
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("loginedMemberId", memberRow.get("id"));
+			session.setAttribute("loginedMemberLoginId", memberRow.get("loginId"));
+			session.setAttribute("loginedMember", memberRow);
 
             response.getWriter().append(String.format(
                 "<script>alert('%s 회원님 로그인 되었습니다.'); location.replace('../article/list');</script>", memberRow.get("name")));
 
         } catch (SQLException e) {
             System.out.println("SQL 에러: " + e.getMessage());
-            response.getWriter().append("<script>alert('회원가입에 실패했습니다.'); history.back();</script>");
+            response.getWriter().append("<script>alert('로그인에 실패했습니다.'); history.back();</script>");
         } finally {
             try {
                 if (conn != null && !conn.isClosed()) {

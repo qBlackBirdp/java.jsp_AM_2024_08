@@ -1,9 +1,10 @@
-package com.KoreaIT.java.jsp_AM.servlet.article;
+package com.KoreaIT.java.jsp_AM.servlet.member;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Map;
 
 import com.KoreaIT.java.jsp_AM.util.DBUtil;
 import com.KoreaIT.java.jsp_AM.util.SecSql;
@@ -16,8 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 
-@WebServlet("/article/dowrite")
-public class ArticleDoWriteServlet extends HttpServlet {
+@WebServlet("/member/dologout")
+public class MemberDoLogoutServlet extends HttpServlet {
 	
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -39,29 +40,19 @@ public class ArticleDoWriteServlet extends HttpServlet {
         Connection conn = null;
 
         try {
-            conn = DriverManager.getConnection(url, user, password);
-            
-            HttpSession session = request.getSession();
+        	conn = DriverManager.getConnection(url, user, password);
 
-            String title = request.getParameter("title");
-            String body = request.getParameter("content");
-            int loginedMemberId = (int) session.getAttribute("loginedMemberId");
+			HttpSession session = request.getSession();
+			session.removeAttribute("loginedMemberId");
+			session.removeAttribute("loginedMemberLoginId");
+			session.removeAttribute("loginedMember");
 
-            SecSql sql = SecSql.from("INSERT INTO article");
-            sql.append("SET regDate = NOW(),");
-            sql.append("updateDate = NOW(),");
-            sql.append("title = ?,", title);
-            sql.append("`body`= ?,", body);
-            
-
-            int id = DBUtil.insert(conn, sql);
-
-            response.getWriter().append(String.format(
-                "<script>alert('%d번 글이 작성되었습니다.'); location.replace('detail?id=%d');</script>", id, id));
-
-        } catch (SQLException e) {
+			response.getWriter()
+					.append(String.format("<script>alert('로그아웃 됨'); location.replace('../article/list');</script>"));
+			
+                    } catch (SQLException e) {
             System.out.println("SQL 에러: " + e.getMessage());
-            response.getWriter().append("<script>alert('글 작성에 실패했습니다.'); history.back();</script>");
+            response.getWriter().append("<script>alert('로그인에 실패했습니다.'); history.back();</script>");
         } finally {
             try {
                 if (conn != null && !conn.isClosed()) {

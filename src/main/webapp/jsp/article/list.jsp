@@ -14,6 +14,10 @@ int[] pageSizes = (int[]) request.getAttribute("pageSizes");
 int pageRange = 5; // 앞뒤로 보일 페이지 번호 수
 int startPage = Math.max(1, currentPage - pageRange);
 int endPage = Math.min(totalPages, currentPage + pageRange);
+
+boolean isLogined = (boolean) request.getAttribute("isLogined");
+int loginedMemberId = (int) request.getAttribute("loginedMemberId");
+Map<String, Object> loginedMember = (Map<String, Object>) request.getAttribute("loginedMember");
 %>
 
 <!DOCTYPE html>
@@ -25,6 +29,30 @@ int endPage = Math.min(totalPages, currentPage + pageRange);
 <body>
 
 	<h2>게시물 목록</h2>
+	
+	<div><%=loginedMemberId%>번 회원 로그인 중
+	</div>
+	<div><%=loginedMember%></div>
+
+	<%
+	if (isLogined) {
+	%>
+	<div>
+		<a href="../member/doLogout">로그아웃</a> <a href="write">글쓰기</a>
+	</div>
+	<%
+	}
+	%>
+
+	<%
+	if (!isLogined) {
+	%>
+	<div>
+		<a href="../member/login">로그인</a>
+	</div>
+	<%
+	}
+	%>
 
 	<a href="../home/main">메인 페이지로 </a>
 	
